@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import { StoreProvider } from '../utils/Store'
 import Footer from './components/Footer'
 import Header from './components/Header'
 
@@ -10,11 +11,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
-      <body flex min-h-screen flex-col justify-between>
-        <Header />
-        <div className='flex min-h-screen flex-col justify-between'>{children}</div>
-        <Footer />
-      </body>
+      <StoreProvider>
+        <body>
+          <Header />
+          <div className='flex min-h-screen flex-col justify-between'>{children}</div>
+          <Footer />
+        </body>
+      </StoreProvider>
     </html>
   )
 }
