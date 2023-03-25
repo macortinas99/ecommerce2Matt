@@ -1,11 +1,13 @@
 'use client'
 
 import { createContext, useReducer } from 'react'
+import Cookies from 'js-cookie'
 
 export const Store = createContext()
 
 const initialState = {
-  cart: { cartItems: [] },
+  // Cookies.get() returns a string so needs to convert to JSON object
+  cart: Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : { cartItems: [] },
 }
 
 function reducer(state, action) {
@@ -17,10 +19,15 @@ function reducer(state, action) {
         ? state.cart.cartItems.map(item => (item.name === existItem.name ? newItem : item))
         : [...state.cart.cartItems, newItem]
 
+      // Need to convert object to string, object can't be saved to cookies
+      Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }))
+
       return { ...state, cart: { ...state.cart, cartItems } }
     }
     case 'CART_REMOVE_ITEM': {
       const cartItems = state.cart.cartItems.filter(item => item.slug !== action.payload.slug)
+      // Need to convert object to string, object can't be saved to cookies
+      Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }))
 
       return { ...state, cart: { ...state.cart, cartItems } }
     }

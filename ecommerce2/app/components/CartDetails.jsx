@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Store } from '../../utils/Store'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,9 +10,17 @@ import { useRouter } from 'next/navigation'
 const CartDetails = () => {
   const { state, dispatch } = useContext(Store)
   const router = useRouter()
+  const [mounted, setMounted] = useState(false)
   const {
     cart: { cartItems },
   } = state
+
+  // This useEffect is very important! Keeps the server and client side UI from rendering different
+  // things resulting in a hydration error. The Frontend renders after the server, and once mounted
+  // then frontend can render properly
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const removeItemHandler = item => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item })
@@ -21,6 +29,10 @@ const CartDetails = () => {
   const updateCartHandler = (item, qty) => {
     const quantity = Number(qty)
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } })
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return (
