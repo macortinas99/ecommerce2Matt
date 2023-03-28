@@ -5,7 +5,6 @@ import '../styles/globals.css'
 import { StoreProvider } from '../utils/Store'
 import Footer from './components/Footer'
 import Header from './components/Header'
-import { ToastContainer } from 'react-toastify'
 
 export const metadata = {
   title: 'Create Next App',

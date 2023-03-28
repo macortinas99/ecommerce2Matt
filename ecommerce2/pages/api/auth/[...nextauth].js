@@ -5,7 +5,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import db from '../../../utils/db'
 
 export default NextAuth({
-  sessoin: {
+  session: {
     strategy: 'jwt',
   },
   callbacks: {
@@ -32,7 +32,7 @@ export default NextAuth({
           email: credentials.email,
         })
         await db.disconnect()
-
+        // If password and email match sign in user
         if (user && bcryptjs.compareSync(credentials.password, user.password)) {
           return {
             _id: user._id,
