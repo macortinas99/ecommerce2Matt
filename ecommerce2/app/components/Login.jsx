@@ -3,8 +3,27 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { signIn, useSession } from 'next-auth/react'
+import { getError } from '../../utils/error'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 const Login = () => {
+  const { data: session } = useSession()
+  const router = useRouter()
+
+  // Get redirect link from query
+  // const searchParams = useSearchParams()
+  const redirect = router.query
+  console.log(session)
+
+  useEffect(() => {
+    if (session?.user) {
+      router.push(redirect || '/')
+    }
+  }, [router, session, redirect])
+
   const {
     handleSubmit,
     register,
@@ -12,12 +31,19 @@ const Login = () => {
     formState: { errors },
   } = useForm()
 
-  useEffect(() => {
-    console.log(errors)
-  }, [errors])
-
-  const submitHandler = ({ email, password }) => {
-    console.log(email, password)
+  const submitHandler = async ({ email, password }) => {
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      })
+      if (result.error) {
+        toast.error(result.error)
+      }
+    } catch (err) {
+      toast.error(getError(err))
+    }
   }
   return (
     <form action='' className='mx-auto max-w-screen-md' onSubmit={handleSubmit(submitHandler)}>

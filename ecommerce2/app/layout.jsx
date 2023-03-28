@@ -1,7 +1,11 @@
+'use client'
+
+import { SessionProvider } from 'next-auth/react'
 import '../styles/globals.css'
 import { StoreProvider } from '../utils/Store'
 import Footer from './components/Footer'
 import Header from './components/Header'
+import { ToastContainer } from 'react-toastify'
 
 export const metadata = {
   title: 'Create Next App',
@@ -13,9 +17,13 @@ export default function RootLayout({ children }) {
     <html lang='en'>
       <StoreProvider>
         <body>
-          <Header />
-          <div className='flex min-h-screen flex-col justify-between'>{children}</div>
-          <Footer />
+          <SessionProvider>
+            <div className='flex min-h-screen flex-col justify-between'>
+              <Header />
+              {children}
+              <Footer />
+            </div>
+          </SessionProvider>
         </body>
       </StoreProvider>
     </html>
