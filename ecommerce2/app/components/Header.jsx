@@ -13,7 +13,6 @@ const Header = () => {
   const { cart } = state
   const [cartItemsCount, setCartItemsCount] = useState(0)
   const { status, data: session } = useSession()
-  console.log(status, session)
 
   useEffect(() => {
     setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0))
