@@ -4,8 +4,9 @@ import React, { useContext, useState, useEffect } from 'react'
 import { Store } from '../../utils/Store'
 import Link from 'next/link'
 import Image from 'next/image'
-import { xcircleIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const CartDetails = () => {
   const { state, dispatch } = useContext(Store)
@@ -26,9 +27,33 @@ const CartDetails = () => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item })
   }
 
-  const updateCartHandler = (item, qty) => {
+  const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty)
+    const data = await fetch(`/api/getProduct?slug=${item.slug}`)
+    if (data.countInStock < quantity) {
+      return toast.error('Sorry product is out of stock', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+    }
+
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } })
+    toast.success('Product updated to cart', {
+      position: 'top-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    })
   }
 
   if (!mounted) {

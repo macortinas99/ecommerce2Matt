@@ -38,10 +38,28 @@ const Login = () => {
         password,
       })
       if (result.error) {
-        toast.error(result.error)
+        toast.error(result.error, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        })
       }
     } catch (err) {
-      toast.error(getError(err))
+      toast.error(getError(err), {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
     }
   }
   return (

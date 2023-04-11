@@ -1,37 +1,46 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
-import data from '../../utils/data.js'
 import Link from 'next/link.js'
 import Image from 'next/image.js'
 import { useContext } from 'react'
 import { Store } from '../../utils/Store.js'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-const ProductDetails = () => {
+const ProductDetails = ({ product }) => {
   const { state, dispatch } = useContext(Store)
   const router = useRouter()
-
-  const searchParams = useSearchParams()
-  const slug = searchParams.get('slug')
-  const product = data.products.find(x => x.slug === slug)
-
-  if (!product) {
+  console.log(product)
+  if (product.message === 'Product does not exist') {
     return <div>Product Not Found</div>
   }
 
-  const addToCartHandler = () => {
+  const addToCartHandler = async () => {
     const existItem = state.cart.cartItems.find(x => x.slug === product.slug)
     const quantity = existItem ? existItem.quantity + 1 : 1
+    // Get updated count in stock # when button clicked
+    let data = await fetch(`/api/getProduct?slug=${product.slug}`)
+    data = await data.json()
 
-    if (product.countInStock < quantity) {
-      alert('Sorry. This product is sold out.')
+    if (data.countInStock < quantity) {
+      toast.error('Sorry product is out of stock', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
       return
     }
 
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity: quantity } })
     router.push('/cart')
   }
+
   return (
     <div>
       <div className='py-2'>
