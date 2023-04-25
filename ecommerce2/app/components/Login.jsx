@@ -6,16 +6,17 @@ import { useForm } from 'react-hook-form'
 import { signIn, useSession } from 'next-auth/react'
 import { getError } from '../../utils/error'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
+import 'react-toastify/dist/ReactToastify.css'
+
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const Login = () => {
   const { data: session } = useSession()
   const router = useRouter()
 
   // Get redirect link from query
-  // const searchParams = useSearchParams()
-  const redirect = router.query
-  console.log(session)
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect')
 
   useEffect(() => {
     if (session?.user) {

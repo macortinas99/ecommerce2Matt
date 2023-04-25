@@ -35,14 +35,20 @@ const Header = () => {
           <div>
             <Link href='/cart' className='p-2'>
               Cart
-              {cartItemsCount > 0 && <span className='ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white'>{cartItemsCount}</span>}
+              {cartItemsCount > 0 && (
+                <span className='ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white'>
+                  {cartItemsCount}
+                </span>
+              )}
             </Link>
 
             {status === 'loading' ? (
               'Loading'
             ) : session?.user.name ? (
               <Menu as='div' className='relative inline-block'>
-                <Menu.Button className='text-blue-600'>{session.user.name}</Menu.Button>
+                <Menu.Button className='text-blue-600'>
+                  {session.user.name}
+                </Menu.Button>
                 <Menu.Items className='absolute right-0 w-56 origin-top-right bg-white shadow-lg'>
                   <Menu.Item>
                     <Link className='dropdown-link' href='/profile'>
@@ -55,7 +61,11 @@ const Header = () => {
                     </Link>
                   </Menu.Item>
                   <Menu.Item>
-                    <Link className='dropdown-link' href='#' onClick={logoutClickHandler}>
+                    <Link
+                      className='dropdown-link'
+                      href='#'
+                      onClick={logoutClickHandler}
+                    >
                       Logout
                     </Link>
                   </Menu.Item>

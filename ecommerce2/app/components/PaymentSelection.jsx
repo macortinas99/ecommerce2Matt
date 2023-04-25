@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 import { Store } from '../../utils/Store'
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const PaymentSelection = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('')
@@ -27,22 +29,23 @@ const PaymentSelection = () => {
         paymentMethod: selectedPaymentMethod,
       })
     )
+
+    router.push('/placeOrder')
   }
 
   useEffect(() => {
     if (!hasRendered) {
       setHasRendered(true)
     }
-    if (hasRendered && !shippingAddress.addresss) {
+    if (hasRendered && !shippingAddress) {
       return router.push('/shipping')
     }
-
     setSelectedPaymentMethod(paymentMethod || '')
-  }, [paymentMethod, router, shippingAddress.addresss])
+  }, [hasRendered, paymentMethod, router, shippingAddress])
 
   return (
     <div>
-      <form onSubmit={() => submitHandler()} className='mx-auto max-w-screen-md'>
+      <form onSubmit={e => submitHandler(e)} className='mx-auto max-w-screen-md'>
         <h1>Payment Method</h1>
         {['Paypal', 'Stripe', 'CashOnDelivery'].map(payment => (
           <div key={payment} className='mb-4'>

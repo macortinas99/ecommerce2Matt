@@ -59,6 +59,10 @@ const ShippingForm = () => {
     router.push('/payment')
   }
 
+  if (status === 'loading') {
+    return <div>Loading...</div>
+  }
+
   return (
     <form className='mx-auto w-[60%] lg:w-[40%] relative ' onSubmit={handleSubmit(submitHandler)}>
       <h1 className='mb-4 text-xl'>Shipping Address</h1>

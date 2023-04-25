@@ -20,7 +20,7 @@ const ProductDetails = ({ product }) => {
     const existItem = state.cart.cartItems.find(x => x.slug === product.slug)
     const quantity = existItem ? existItem.quantity + 1 : 1
     // Get updated count in stock # when button clicked
-    let data = await fetch(`/api/getProduct?slug=${product.slug}`)
+    let data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getProduct?slug=${product.slug}`)
     data = await data.json()
 
     if (data.countInStock < quantity) {

@@ -11,13 +11,13 @@ export default NextAuth({
   callbacks: {
     // Assigns token to user
     async jwt({ token, user }) {
-      if (user?._id) token._ud = user._id
+      if (user?._id) token._id = user._id
       if (user?.isAdmin) token.isAdmin = user.isAdmin
       return token
     },
     // Defines session to user
     async session({ session, token }) {
-      if (token?._id) session._ud = token._id
+      if (token?._id) session._id = token._id
       if (token?.isAdmin) session.isAdmin = token.isAdmin
       return session
     },
@@ -38,7 +38,6 @@ export default NextAuth({
             _id: user._id,
             name: user.name,
             email: user.email,
-            // ?
             image: 'f',
             isAdmin: user.isAdmin,
           }

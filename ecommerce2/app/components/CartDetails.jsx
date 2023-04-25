@@ -29,7 +29,7 @@ const CartDetails = () => {
 
   const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty)
-    const data = await fetch(`/api/getProduct?slug=${item.slug}`)
+    const data = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getProduct?slug=${item.slug}`)
     if (data.countInStock < quantity) {
       return toast.error('Sorry product is out of stock', {
         position: 'top-center',
