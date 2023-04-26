@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const Login = () => {
+const Registration = () => {
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -27,12 +27,26 @@ const Login = () => {
   const {
     handleSubmit,
     register,
-    watch,
+    getValues,
     formState: { errors },
   } = useForm()
 
-  const submitHandler = async ({ email, password }) => {
+  const submitHandler = async ({ name, email, password }) => {
     try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/signup`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+          }),
+          headers: {
+            'content-type': 'application/json',
+          },
+        }
+      )
       const result = await signIn('credentials', {
         redirect: false,
         email,
@@ -69,7 +83,22 @@ const Login = () => {
       className='mx-auto max-w-screen-md'
       onSubmit={handleSubmit(submitHandler)}
     >
-      <h1 className='mb-4 text-xl'>Login</h1>
+      <h1 className='mb-4 text-xl'>Register a New Account</h1>
+      <div className='mb-4'>
+        <label htmlFor='name'>Name</label>
+        <input
+          type='text'
+          className='w-full'
+          id='name'
+          autoFocus
+          {...register('name', {
+            required: 'Please enter your name',
+          })}
+        />
+        {errors.name && (
+          <div className='text-red-500'>{errors.name.message}</div>
+        )}
+      </div>
       <div className='mb-4'>
         <label htmlFor='email'>Email</label>
         <input
@@ -83,7 +112,6 @@ const Login = () => {
           })}
           className='w-full'
           id='email'
-          autoFocus
         />
         {errors.email?.message && (
           <div className='text-red-500'>{errors.email.message}</div>
@@ -102,23 +130,45 @@ const Login = () => {
               message: 'Password must be more than 5 characters',
             },
           })}
-          autoFocus
         />
         {errors.password?.message && (
           <div className='text-red-500'>{errors.password.message}</div>
         )}
       </div>
       <div className='mb-4'>
-        <button className='primary-button'>Login</button>
+        <label htmlFor='password'>Confirm Password</label>
+        <input
+          type='password'
+          className='w-full'
+          id='confirmPassword'
+          {...register('confirmPassword', {
+            required: 'Please confirm password.',
+            validate: value => value === getValues('password'),
+            minLength: {
+              value: 6,
+              message: 'Passwords must match.',
+            },
+          })}
+        />
+        {errors.confirmPassword && (
+          <div className='text-red-500'>
+            {errors.confirmPassword.message}
+          </div>
+        )}
+        {errors.confirmPassword?.message &&
+          errors.confirmPassword.type === 'validate' && (
+            <div className='text-red-500'>Passwords do not match</div>
+          )}
+      </div>
+      <div className='mb-4'>
+        <button className='primary-button'>Register</button>
       </div>
       <div>
-        Don&apos;t have an account? &nbsp;
-        <Link href={`/register?redirect=${redirect || '/'}`}>
-          Register
-        </Link>
+        Already have an account? &nbsp;
+        <Link href={'/login'}>Login</Link>
       </div>
     </form>
   )
 }
 
-export default Login
+export default Registration
