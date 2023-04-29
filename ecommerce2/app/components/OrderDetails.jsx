@@ -21,6 +21,7 @@ function reducer(state, action) {
 }
 
 const OrderDetails = () => {
+  const [hasRendered, setHasRendered] = useState(false)
   const { status, data: session } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()

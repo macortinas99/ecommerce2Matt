@@ -64,11 +64,7 @@ const Login = () => {
     }
   }
   return (
-    <form
-      action=''
-      className='mx-auto max-w-screen-md'
-      onSubmit={handleSubmit(submitHandler)}
-    >
+    <form action='' className='mx-auto max-w-screen-md' onSubmit={handleSubmit(submitHandler)}>
       <h1 className='mb-4 text-xl'>Login</h1>
       <div className='mb-4'>
         <label htmlFor='email'>Email</label>
@@ -85,37 +81,28 @@ const Login = () => {
           id='email'
           autoFocus
         />
-        {errors.email?.message && (
-          <div className='text-red-500'>{errors.email.message}</div>
-        )}
+        {errors.email?.message && <div className='text-red-500'>{errors.email.message}</div>}
       </div>
       <div className='mb-4'>
-        <label htmlFor='password'>Password</label>
+        <label htmlFor='password'>password</label>
         <input
           type='password'
           className='w-full'
           id='password'
           {...register('password', {
             required: 'Please enter password',
-            minLength: {
-              value: 6,
-              message: 'Password must be more than 5 characters',
-            },
+            minLength: { value: 6, message: 'Password must be more than 5 characters' },
           })}
           autoFocus
         />
-        {errors.password?.message && (
-          <div className='text-red-500'>{errors.password.message}</div>
-        )}
+        {errors.password?.message && <div className='text-red-500'>{errors.password.message}</div>}
       </div>
       <div className='mb-4'>
         <button className='primary-button'>Login</button>
       </div>
       <div>
         Don&apos;t have an account? &nbsp;
-        <Link href={`/register?redirect=${redirect || '/'}`}>
-          Register
-        </Link>
+        <Link href={'/register'}>Register</Link>
       </div>
     </form>
   )
