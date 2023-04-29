@@ -5,8 +5,10 @@ import ProductItem from './components/ProductItem'
 
 export default async function Page() {
   // get product data from API call
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getProducts`)
-  const products = await res.json()
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getProducts`
+  )
+  const { products } = await res.json()
 
   return (
     <div className=''>
